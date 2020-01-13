@@ -17,6 +17,7 @@ interface Tutorial4Step1State {
     showDelXValue: boolean;
     showDelYValue: boolean;
     showErrorMessage: boolean;
+    focusInput: boolean;
     currentSubStep: number;
     showText2: boolean;
     showText3: boolean;
@@ -52,6 +53,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
             showDelXValue: false,
             showDelYValue: false,
             showErrorMessage: false,
+            focusInput: false,
             currentSubStep: 0,
             showText2: false,
             showText3: false,
@@ -81,9 +83,14 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
     componentDidUpdate() {
         const graph = this.props.graph;
 
-        if (this.coordinate2.current) {
-            this.coordinate2.current.focus();
+        if(this.coordinate2.current) {
+            if(this.state.focusInput) {
+                this.coordinate2.current.focus();
+            } else {
+                this.coordinate2.current.blur();
+            }
         }
+        
         if (this.state.showText3) {
             graph.setOnClickHandler((x, y) => {
                 this.onGraphClicked({ x: x, y: y }, graph);
@@ -176,12 +183,16 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
                 this._isMounted && this.setState({ showText3: true })
                 break
             case 3:
-                this._isMounted && this.setState({ showText4: true })
+                this._isMounted && this.setState({ 
+                    focusInput: true,
+                    showText4: true 
+                })
                 break
             case 4:
                 if (this.coordinate2.current.value == this.points.p2.x && this.coordinate1.current.value == this.points.p1.x) {
                     this.delValue.x = this.coordinate2.current.value - this.coordinate1.current.value
                     this._isMounted && this.setState({
+                        focusInput: false,
                         showDelXValue: true,
                         showErrorMessage: false
                     })
@@ -193,12 +204,16 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
                 }
                 break
             case 5:
-                this._isMounted && this.setState({ showText5: true })
+                this._isMounted && this.setState({
+                    focusInput: true,
+                    showText5: true 
+                })
                 break
             case 6:
                 if (this.coordinate2.current.value == this.points.p2.y && this.coordinate1.current.value == this.points.p1.y) {
                     this.delValue.y = this.coordinate2.current.value - this.coordinate1.current.value
                     this._isMounted && this.setState({
+                        focusInput: false,
                         showDelYValue: true,
                         showErrorMessage: false
                     })
@@ -229,7 +244,10 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
 
     subActionStep2() {
         return <div>
-            <StepAction> ΔY= y₂ - y₁ = (<NumberInput ref={this.coordinate2} />) - (<NumberInput ref={this.coordinate1} />)​ {this.state.showDelYValue ? (<span> = {this.delValue.y} </span>) : null}</StepAction>
+            <StepAction>
+                ΔY= y₂ - y₁ = (<NumberInput ref={this.coordinate2} />) - (<NumberInput ref={this.coordinate1} />)​ 
+                {this.state.showDelYValue ? (<span> = {this.delValue.y} </span>) : null}
+            </StepAction>
         </div>
     }
 

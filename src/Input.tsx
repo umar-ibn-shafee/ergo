@@ -72,6 +72,10 @@ export class NumberInput extends React.Component<InputProps, InputState> {
     this.inputRef.current.focus();
   }
 
+  blur() {
+    this.inputRef.current.blur();
+  }
+
   clear() {
     this.setState({
       value: ""
