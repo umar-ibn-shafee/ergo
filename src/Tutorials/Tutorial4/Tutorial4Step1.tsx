@@ -30,6 +30,7 @@ interface Tutorial4Step1State {
 export default class Tutorial4Step1 extends React.Component<TutorialStepProps, Tutorial4Step1State>{
     coordinate1: React.RefObject<NumberInput>;
     coordinate2: React.RefObject<NumberInput>;
+    nextRef: React.RefObject<EnterButton>;
     delValue: any;
     points: any;
     currentPoint1: any;
@@ -64,6 +65,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
         }
         this.coordinate1 = React.createRef();
         this.coordinate2 = React.createRef();
+        this.nextRef = React.createRef();
         this.points = {};
         this.delValue = {}
         this.selectedP1 = {};
@@ -88,6 +90,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
                 this.coordinate2.current.focus();
             } else {
                 this.coordinate2.current.blur();
+                this.nextRef.current && this.nextRef.current.focus();
             }
         }
         
@@ -273,7 +276,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
         var text4Element = <div></div>;
         var text5Element = <div></div>;
         var text6Element = <div></div>;
-        var enterButton = <EnterButton onClick={this.onNextButton.bind(this)} />;
+        var enterButton = <EnterButton ref={this.nextRef} onClick={this.onNextButton.bind(this)} />;
 
         if (this.state.showText2) {
             text2Element = <div>
@@ -307,7 +310,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
                 </Block>
             </div>
         
-            enterButton = <EnterButton onClick={this.onNextButton.bind(this)} />;    
+            enterButton = <EnterButton ref={this.nextRef} onClick={this.onNextButton.bind(this)} />;
         }
 
         if (this.state.showText4) {
