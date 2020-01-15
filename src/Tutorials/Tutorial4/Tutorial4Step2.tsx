@@ -21,12 +21,14 @@ interface Tutorial4Step1State {
     showText2: boolean;
     showText3: boolean;
     showText4: boolean;
-    isContentAvailable: boolean
+    isContentAvailable: boolean;
+    focusInput: boolean;
 }
 
 export default class Tutorial4Step1 extends React.Component<TutorialStepProps, Tutorial4Step1State>{
     coordinate1: React.RefObject<NumberInput>;
     coordinate2: React.RefObject<NumberInput>;
+    nextRef: React.RefObject<EnterButton>;
     currentPoint1: any;
     currentPoint2: any;
     delValue: any;
@@ -50,11 +52,13 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
             showText2: false,
             showText3: false,
             showText4: false,
-            isContentAvailable: false
+            isContentAvailable: false,
+            focusInput: false,
         }
 
         this.coordinate1 = React.createRef();
         this.coordinate2 = React.createRef();
+        this.nextRef = React.createRef();
         this.delValue = {}
         this.points = {p1: {}, p2: {}}
         this.currentPoint1 = null;
@@ -74,8 +78,13 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
     }
 
     componentDidUpdate() {
-        if (this.coordinate2.current) {
-            this.coordinate2.current.focus();
+        if(this.coordinate2.current) {
+            if(this.state.focusInput) {
+                this.coordinate2.current.focus();
+            } else {
+                this.coordinate2.current.blur();
+                this.nextRef.current && this.nextRef.current.focus();
+            }
         }
     }
 
@@ -135,12 +144,16 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
 
         switch (currentSubStep) {
             case 1:
-                this._isMounted && this.setState({ showText2: true })
+                this._isMounted && this.setState({ 
+                    focusInput: true,
+                    showText2: true
+                })
                 break
             case 2:
                 if (this.coordinate2.current.value == this.points.p2.x && this.coordinate1.current.value == this.points.p1.x) {
                     this.delValue.x = this.coordinate2.current.value - this.coordinate1.current.value
                     this._isMounted && this.setState({
+                        focusInput: false,
                         showDelXValue: true,
                         showErrorMessage: false
                     })
@@ -151,12 +164,16 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
                 }
                 break
             case 3:
-                this._isMounted && this.setState({ showText3: true })
+                this._isMounted && this.setState({ 
+                    focusInput: true,
+                    showText3: true
+                })
                 break
             case 4:
                 if (this.coordinate2.current.value == this.points.p2.y && this.coordinate1.current.value == this.points.p1.y) {
                     this.delValue.y = this.coordinate2.current.value - this.coordinate1.current.value
                     this._isMounted && this.setState({
+                        focusInput: false,
                         showDelYValue: true,
                         showErrorMessage: false
                     })
@@ -206,7 +223,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
         var text2Element = <div></div>;
         var text3Element = <div></div>;
         var text4Element = <div></div>;
-        var enterButton = <EnterButton onClick={this.onNextButton.bind(this)} />;
+        var enterButton = <EnterButton ref={this.nextRef} onClick={this.onNextButton.bind(this)} />;
         const text1 = this.text1(this.points.p1.x, this.points.p1.y)
         const text2 = this.egP1Text(this.points.p1.x, this.points.p1.y)
         const text3 = this.egP2Text(this.points.p2.x, this.points.p2.y)
