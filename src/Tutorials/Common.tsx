@@ -185,22 +185,6 @@ export function formatAddition(numbers) {
   return equation.join(" ");
 }
 
-export function EnterButton(props: {onClick: () => void}) {
-  const imageStyle = {
-    height: "36px",
-    width: "36px",
-  } as React.CSSProperties;
-
-  const buttonStyle = {
-    float: "right",
-    marginBottom: "-47px"
-  } as React.CSSProperties;
-
-  return <Button style={buttonStyle} onClick={props.onClick}>
-      <img src={enterButtonIcon} style={imageStyle}/>
-  </Button>
-}
-
 export const lineAttr = {
   stroke: colorPalette[15],
   "stroke-width": "2"
@@ -217,5 +201,38 @@ export function TutorialContainer(props) {
   } as React.CSSProperties;
 
   return <div style={style}>{props.children}</div>
+}
+
+export class EnterButton extends React.Component<{onClick: () => void}> {
+  buttonRef: React.RefObject<HTMLButtonElement>;
+
+  constructor(props) {
+    super(props)
+
+    this.buttonRef = React.createRef()
+  }
+
+  focus() {
+    this.buttonRef.current.focus();
+  }
+
+  blur = () => this.buttonRef.current.blur();
+
+  render() {
+    const imageStyle = {
+      height: "36px",
+      width: "36px",
+    } as React.CSSProperties;
+  
+    const buttonStyle = {
+      float: "right",
+      marginBottom: "-47px"
+    } as React.CSSProperties;
+
+    return <Button style={buttonStyle} ref= {this.buttonRef} onClick={this.props.onClick}>
+            <img src={enterButtonIcon} style={imageStyle}/>
+          </Button>
+  }
+
 }
 
