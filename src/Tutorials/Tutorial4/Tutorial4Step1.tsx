@@ -24,18 +24,19 @@ interface Tutorial4Step1State {
     showText4: boolean;
     showText5: boolean;
     errorNum: number;
-    isP1Selected: boolean
+    isP1Selected: boolean;
+    delValue: any;
+    selectedPoints: any;
+    selectedP1: any;
 }
 
 export default class Tutorial4Step1 extends React.Component<TutorialStepProps, Tutorial4Step1State>{
     coordinate1: React.RefObject<NumberInput>;
     coordinate2: React.RefObject<NumberInput>;
     nextRef: React.RefObject<EnterButton>;
-    delValue: any;
-    points: any;
     currentPoint1: any;
     currentPoint2: any;
-    selectedP1: any;
+    graphPoints: any;
 
     _isMounted: boolean;
 
@@ -61,14 +62,16 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
             showText4: false,
             showText5: false,
             errorNum: 1,
-            isP1Selected: false
+            isP1Selected: false,
+            selectedPoints: {},
+            delValue: {},
+            selectedP1: {}
         }
         this.coordinate1 = React.createRef();
         this.coordinate2 = React.createRef();
         this.nextRef = React.createRef();
-        this.points = {};
-        this.delValue = {}
-        this.selectedP1 = {};
+
+        this.graphPoints = {};
 
         this.currentPoint1 = null;
         this.currentPoint2 = null;
@@ -101,8 +104,8 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
         }
 
         if (this.state.isP1Selected) {
-            const p1 = { x: this.points.p1.x, y: this.points.p1.y}
-            const p2 = { x: this.points.p2.x, y: this.points.p2.y}
+            const p1 = { x: this.state.selectedPoints.p1.x, y: this.state.selectedPoints.p1.y}
+            const p2 = { x: this.state.selectedPoints.p2.x, y: this.state.selectedPoints.p2.y}
             graph.annotatePoint(`P1(${p1.x}, ${p1.y})`, p1, colorPalette[1])
             graph.annotatePoint(`P2(${p2.x}, ${p2.y})`, p2, colorPalette[1])
         }
@@ -110,10 +113,6 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
 
     componentWillUnmount() {
         this._isMounted = false;
-    }
-
-    swapPoints(data) {
-        return {p1: data.points.p2, p2: data.points.p1}
     }
 
     generatePoints(graph) {
@@ -129,8 +128,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
         const x2 = getRandomSample(xRange);
         const y2 = getRandomSample(yRange);
 
-        this.points.p1 = { x: x1, y: y1 }
-        this.points.p2 = { x: x2, y: y2 }
+        this.graphPoints =  { p1: {x: x1, y: y1}, p2: {x: x2, y: y2} }
 
         if (this.currentPoint1) {
             graph.removePoint(this.currentPoint1);
@@ -151,15 +149,20 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
 
     onGraphClicked(point, graph) {
         const p = graph.snapToGrid(point);
-        this.selectedP1 = p;
+        this.setState({
+            selectedP1: p
+        })
 
-        if (this.selectedP1.x == this.points.p1.x && this.selectedP1.y == this.points.p1.y) {
-            this._isMounted && this.setState({ isP1Selected: true })
-        } else if ((this.selectedP1.x == this.points.p2.x && this.selectedP1.y == this.points.p2.y)) {
-            let temp = this.points.p1
-            this.points.p1 = this.points.p2
-            this.points.p2 = temp
-            this._isMounted && this.setState({ isP1Selected: true })
+        if (this.state.selectedP1.x == this.graphPoints.p1.x && this.state.selectedP1.y == this.graphPoints.p1.y) {
+            this._isMounted && this.setState({ 
+                selectedPoints:{ p1: this.graphPoints.p1, p2: this.graphPoints.p2 },
+                isP1Selected: true
+            })
+        } else if ((this.state.selectedP1.x == this.graphPoints.p2.x && this.state.selectedP1.y == this.graphPoints.p2.y)) {
+            this._isMounted && this.setState({
+                selectedPoints: { p1: this.graphPoints.p2, p2: this.graphPoints.p1 },
+                isP1Selected: true
+            })
         }
     }
 
@@ -192,9 +195,9 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
                 })
                 break
             case 4:
-                if (this.coordinate2.current.value == this.points.p2.x && this.coordinate1.current.value == this.points.p1.x) {
-                    this.delValue.x = this.coordinate2.current.value - this.coordinate1.current.value
+                if (this.coordinate2.current.value == this.state.selectedPoints.p2.x && this.coordinate1.current.value == this.state.selectedPoints.p1.x) {
                     this._isMounted && this.setState({
+                        delValue: { x: this.coordinate2.current.value - this.coordinate1.current.value },
                         focusInput: false,
                         showDelXValue: true,
                         showErrorMessage: false
@@ -213,13 +216,13 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
                 })
                 break
             case 6:
-                if (this.coordinate2.current.value == this.points.p2.y && this.coordinate1.current.value == this.points.p1.y) {
-                    this.delValue.y = this.coordinate2.current.value - this.coordinate1.current.value
-                    this._isMounted && this.setState({
+                if (this.coordinate2.current.value == this.state.selectedPoints.p2.y && this.coordinate1.current.value == this.state.selectedPoints.p1.y) {
+                    this._isMounted && this.setState((state) => ({
+                        delValue: {x: state.delValue.x, y: this.coordinate2.current.value - this.coordinate1.current.value},
                         focusInput: false,
                         showDelYValue: true,
                         showErrorMessage: false
-                    })
+                    }))
                 } else {
                     this._isMounted && this.setState({
                         showErrorMessage: true,
@@ -228,7 +231,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
                 }
                 break
             case 7:
-                this.props.onStepComplete({points: this.points});
+                this.props.onStepComplete({points: this.state.selectedPoints});
                 break
             default:
                 console.log('handleContent executed & in here currentSubStep = ', currentSubStep)
@@ -240,7 +243,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
         return <div>
             <StepAction> 
                 ΔX= x₂ - x₁ = (<NumberInput ref={this.coordinate2} />) - (<NumberInput ref={this.coordinate1} />)​ 
-                {this.state.showDelXValue ? (<span> = {this.delValue.x} </span>) : null}
+                {this.state.showDelXValue ? (<span> = {this.state.delValue.x} </span>) : null}
             </StepAction>
         </div>
     }
@@ -249,7 +252,7 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
         return <div>
             <StepAction>
                 ΔY= y₂ - y₁ = (<NumberInput ref={this.coordinate2} />) - (<NumberInput ref={this.coordinate1} />)​ 
-                {this.state.showDelYValue ? (<span> = {this.delValue.y} </span>) : null}
+                {this.state.showDelYValue ? (<span> = {this.state.delValue.y} </span>) : null}
             </StepAction>
         </div>
     }
@@ -301,8 +304,8 @@ export default class Tutorial4Step1 extends React.Component<TutorialStepProps, T
         }
 
         if (this.state.isP1Selected) {
-            const text4 = this.egP1Text(this.points.p1.x, this.points.p1.y)
-            const text5 = this.egP2Text(this.points.p2.x, this.points.p2.y)
+            const text4 = this.egP1Text(this.state.selectedPoints.p1.x, this.state.selectedPoints.p1.y)
+            const text5 = this.egP2Text(this.state.selectedPoints.p2.x, this.state.selectedPoints.p2.y)
             text4Element = <div>
                 <Block>
                     <StepContent>{text4}</StepContent>
