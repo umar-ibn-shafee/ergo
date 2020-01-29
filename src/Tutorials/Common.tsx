@@ -202,6 +202,10 @@ export function TutorialContainer(props) {
 
   return <div style={style}>{props.children}</div>
 }
+  
+/*
+* Following code added or edited by Umar
+*/
 
 export class EnterButton extends React.Component<{onClick: () => void}> {
   buttonRef: React.RefObject<HTMLButtonElement>;
