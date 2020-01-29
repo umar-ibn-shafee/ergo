@@ -101,6 +101,10 @@ export class NumberInput extends React.Component<InputProps, InputState> {
   }
 }
 
+/**
+* Below code is added or edited by Umar
+*/
+
 export class TextInput extends React.Component<InputProps, InputState> {
   inputRef: React.RefObject<HTMLInputElement> 
 
