@@ -240,3 +240,48 @@ export class EnterButton extends React.Component<{onClick: () => void}> {
 
 }
 
+export const equations = [
+  {
+    coefficients: [2, -1, -10*10],
+    simplification1: "\\frac{2x}{-100} - \\frac{y}{-100} - \\frac{100}{-100} = 0",
+    simplification2: "-\\frac{x}{50} + \\frac{y}{100} + 1 = 0",
+    simplifiedXCoeff: "-\\frac{1}{50}",
+    simplifiedYCoeff: "\\frac{1}{100}",
+  },
+  {
+    coefficients: [5, -4, 20*10],
+    simplification1: "\\frac{5x}{200} + \\frac{-4y}{200} + \\frac{200}{200} = 0",
+    simplification2: "\\frac{x}{40} - \\frac{y}{50} + 1 = 0",
+    simplifiedXCoeff: "\\frac{1}{40}",
+    simplifiedYCoeff: "-\\frac{1}{50}",
+  },
+  {
+    coefficients: [-5, -2, 20*10],
+    simplification1: "\\frac{-5x}{200} - \\frac{2y}{200} + \\frac{200}{200} = 0",
+    simplification2: "-\\frac{x}{40} - \\frac{y}{100} + 1 = 0",
+    simplifiedXCoeff: "-\\frac{1}{40}",
+    simplifiedYCoeff: "-\\frac{1}{100}",
+  },
+  {
+    coefficients: [1, -2, 18*10],
+    simplification1: "\\frac{x}{180} + \\frac{-2y}{180} + \\frac{180}{180} = 0",
+    simplification2: "\\frac{x}{180} - \\frac{y}{90} + 1 = 0",
+    simplifiedXCoeff: "\\frac{1}{180}",
+    simplifiedYCoeff: "-\\frac{1}{90}",
+  },
+  {
+    coefficients: [-2, -4, 8*20],
+    simplification1: "\\frac{-2x}{160} + \\frac{-4y}{160} + \\frac{160}{160} = 0",
+    simplification2: "-\\frac{x}{80} - \\frac{y}{40} + 1 = 0",
+    simplifiedXCoeff: "-\\frac{1}{80}",
+    simplifiedYCoeff: "-\\frac{1}{40}",
+  },
+  {
+    coefficients: [-1, 4, -8*20],
+    simplification1: "\\frac{-x}{-160} + \\frac{4y}{-160} + \\frac{-160}{-160} = 0",
+    simplification2: "\\frac{x}{160} - \\frac{y}{40} + 1 = 0",
+    simplifiedXCoeff: "\\frac{1}{160}",
+    simplifiedYCoeff: "-\\frac{1}{40}",
+  }
+]
+
