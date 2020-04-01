@@ -128,8 +128,15 @@ export class TextInput extends React.Component<InputProps, InputState> {
 
   handleInput(event) {
     const value = event.target.value 
-    console.log('Text input: ', value)
     this.setState({value: value})
+  }
+
+  focus() {
+    this.inputRef.current.focus();
+  }
+
+  blur() {
+    this.inputRef.current.blur();
   }
 
   render() {
