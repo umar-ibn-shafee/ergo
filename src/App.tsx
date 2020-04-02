@@ -65,7 +65,7 @@ export default class App extends React.Component<{}, AppState> {
       showMenu: true,
       gameMode: GameMode.Game,
       level: 0,
-      completedUpto: 0,
+      completedUpto: 6,
       tutorialCompleted: false,
       tutorialSkipped: false,
       tutorialContents: new tutorialConstructors[0](),
@@ -98,7 +98,7 @@ export default class App extends React.Component<{}, AppState> {
         const levelDef = new levelDefs[newLevel%levelDefs.length]()
 
         this.setState({
-          completedUpto: newLevel,
+          completedUpto: 6,
           tutorialContents: tutorialContents,
           tutorialCompleted: false,
           tutorialSkipped: false,
@@ -127,10 +127,14 @@ export default class App extends React.Component<{}, AppState> {
 
   selectLevel(gameMode, levelNumber) {
     const sidebarType = (gameMode == GameMode.Tutorial ? SidebarType.Tutorial : SidebarType.Level)
+    const tutorialContents = new tutorialConstructors[levelNumber%tutorialConstructors.length]()
+    const levelDef = new levelDefs[levelNumber%levelDefs.length]()
 
     this.setState({
       gameMode: gameMode,
       level: levelNumber,
+      tutorialContents: tutorialContents,
+      levelDef: levelDef,
       sidebarType: sidebarType,
       showMenu: false,
     })
@@ -256,16 +260,4 @@ export default class App extends React.Component<{}, AppState> {
   }
 }
 
-/*
-import React from 'react'
 
-import './App.scss'
-
-const App:React.StatelessComponent<{}>  = () => (
-    <div className='container'>
-        <h1>Hello World, React!</h1>
-    </div>
-)
-
-export default App;
-*/
