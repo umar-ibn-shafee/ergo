@@ -7,13 +7,13 @@ import Tutorial6Contents from './Tutorial6'
 import Tutorial7Contents from './Tutorial7'
 
 export const tutorialConstructors = [
-  Tutorial7Contents,
-  Tutorial6Contents,
-  Tutorial5Contents,
-  Tutorial4Contents,
-  Tutorial3Contents,
-  Tutorial2Contents,
   Tutorial1Contents,
+  Tutorial2Contents,
+  Tutorial3Contents,
+  Tutorial4Contents,
+  Tutorial5Contents,
+  Tutorial6Contents,
+  Tutorial7Contents,
 ]
 
 export { TutorialContents, TutorialState } from './Common'

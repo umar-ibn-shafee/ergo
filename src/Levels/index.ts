@@ -7,10 +7,10 @@ import Level6Definition from './Level6';
 import Level7Definition from './Level7';
 
 export const levelDefs = [
-  Level4Definition,
-  Level3Definition,
   Level1Definition,
   Level2Definition,
+  Level3Definition,
+  Level4Definition,
   Level5Definition,
   Level6Definition,
   Level7Definition,
